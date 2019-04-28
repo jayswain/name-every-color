@@ -17,6 +17,7 @@ class Bearer {
       };
 
       const req = https.request(options, (res) => {
+        //FIXME - use on('end') instead
         res.on('data', (d) => {
           const parsed = JSON.parse(d.toString('utf8'));
           resolve(parsed["access_token"]);
