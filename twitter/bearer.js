@@ -1,35 +1,27 @@
-const https = require('https');
+const request = require('request');
 
 class Bearer {
   static requestToken(consumerAPIKey, consumerAPISecret) {
     return new Promise((resolve, reject) => {
       const encodedSecret = this.encodeKeyAndSecret(consumerAPIKey, consumerAPISecret);
 
-      const options = {
-        hostname: 'api.twitter.com',
-        port: 443,
-        path: '/oauth2/token',
-        method: 'POST',
+      request.post({
+        url: 'https://api.twitter.com/oauth2/token',
         headers: {
           'Authorization': `Basic ${ encodedSecret }`,
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+
+        form: {
+          grant_type: 'client_credentials'
         }
-      };
-
-      const req = https.request(options, (res) => {
-        //FIXME - use on('end') instead
-        res.on('data', (d) => {
-          const parsed = JSON.parse(d.toString('utf8'));
-          resolve(parsed["access_token"]);
-        });
+      }, (err, response, body) => {
+        console.log('err', err)
+        console.log('resp', response)
+        console.log('body', body);
+        const parsed = JSON.parse(body);
+        resolve(parsed["access_token"]);
       });
-
-      req.on('error', (e) => {
-        console.error('error:', e);
-      });
-
-      req.write('grant_type=client_credentials');
-      req.end();
     });
   };
 
