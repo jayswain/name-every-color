@@ -16,8 +16,7 @@ class Status {
           status: message
         }
       }, (err, response, body) => {
-        console.log('err', err)
-        console.log('resp', response)
+        console.log('error', err);
         console.log('body', body);
       });
     });

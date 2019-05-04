@@ -16,9 +16,6 @@ class Bearer {
           grant_type: 'client_credentials'
         }
       }, (err, response, body) => {
-        console.log('err', err)
-        console.log('resp', response)
-        console.log('body', body);
         const parsed = JSON.parse(body);
         resolve(parsed["access_token"]);
       });
