@@ -6,7 +6,7 @@ const BOT_SCREEN_NAME = 'colornamebot';
 
 class App {
   static run() {
-    console.log('running');
+    process.stdout.write('Running...' + '\n');
     let bearerToken;
 
     Twitter.Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TWITTER_CONSUMER_API_SECRET).then(response => {
@@ -33,8 +33,9 @@ class App {
         const colorName = ntc.name(hex)[1];
         const status = `@${ TARGET_SCREEN_NAME } ${ colorName }`;
 
-        console.log('.');
+        console.log(text);
 
+        //console.log(status);
         //Twitter.Status.update(
           //process.env.TWITTER_CONSUMER_API_KEY,
           //process.env.TWITTER_CONSUMER_API_SECRET,
@@ -44,10 +45,12 @@ class App {
           //{
             //in_reply_to_status_id: id
           //}
-        //);
+        //).then(response => {
+          //process.stdout.write('.');
+        //});
       }
     }).then(() => {
-      console.log('finished');
+      process.stdout.write('\n' + 'Finished' + '\n');
     }).catch(error => {
       console.log('error', error);
     });
