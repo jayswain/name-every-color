@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const Twitter = require('./twitter');
-const ntc = require('./vendor/ntc/ntc');
+const ntc = require('./vendor/ntc');
 
 const targetScreenName = 'everycolorbot';
 const botScreenName = 'colornamebot';
