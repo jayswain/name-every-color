@@ -16,8 +16,8 @@ class Status {
           status: message
         }
       }, (err, response, body) => {
-        console.log('error', err);
-        console.log('body', body);
+        const parsed = JSON.parse(body);
+        resolve(parsed);
       });
     });
   };
