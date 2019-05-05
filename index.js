@@ -1,23 +1,21 @@
 require('dotenv').config();
 
-const Bearer = require('./twitter/bearer');
-const Timeline = require('./twitter/timeline');
-const Status = require('./twitter/status');
+const Twitter = require('./twitter');
 const ntc = require('./vendor/ntc/ntc');
 
 const targetScreenName = 'everycolorbot';
 const botScreenName = 'colornamebot';
 let bearerToken;
 
-Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TWITTER_CONSUMER_API_SECRET).then(response => {
+Twitter.Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TWITTER_CONSUMER_API_SECRET).then(response => {
   bearerToken = response;
   return response;
 }).then(response => {
-  return Timeline.request(bearerToken, botScreenName, { count: 1 }).then(response => {
+  return Twitter.Timeline.request(bearerToken, botScreenName, { count: 1 }).then(response => {
     return response[0]["in_reply_to_status_id"];
   })
 }).then(sinceId => {
-  return Timeline.request(bearerToken, targetScreenName, { since_id: sinceId, count: 200 });
+  return Twitter.Timeline.request(bearerToken, targetScreenName, { since_id: sinceId, count: 200 });
 }).then(tweets => {
   //Using a reverse loop here so our sinceId lines up for the *next* run.
   //
@@ -33,7 +31,7 @@ Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TWITTER_CO
 
     console.log(status);
 
-    //Status.update(
+    //Twitter.Status.update(
       //process.env.TWITTER_CONSUMER_API_KEY,
       //process.env.TWITTER_CONSUMER_API_SECRET,
       //process.env.TWITTER_ACCOUNT_ACCESS_TOKEN,
