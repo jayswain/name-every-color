@@ -9,24 +9,21 @@ const screenName = 'everycolorbot';
 let bearerToken;
 
 Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TWITTER_CONSUMER_API_SECRET).then(response => {
-  return { bearerToken: response };
+  bearerToken = response;
+  return response;
 }).then(response => {
-  bearerToken = response['bearerToken'];
-
   return Timeline.request(bearerToken, 'colornamebot', { count: 1 }).then(response => {
-    return { sinceId: response[0]["in_reply_to_status_id"] };
+    return response[0]["in_reply_to_status_id"];
   })
-}).then(response => {
-  const sinceId = response['sinceId'];
-
+}).then(sinceId => {
   return Timeline.request(bearerToken, screenName, { since_id: sinceId, count: 200 });
-}).then(response => {
+}).then(tweets => {
   //Using a reverse loop here so our sinceId lines up for the *next* run.
   //
   //since_id param *includes* that id as well, so lets skip that one.
   //
-  for(let i = response.length - 1; i--;) {
-    const tweet = response[i];
+  for(let i = tweets.length - 1; i--;) {
+    const tweet = tweets[i];
     const id = tweet.id_str;
     const text = tweet.text.split(' ')[0];
     const hex = `#${ text.split(" ")[0].slice(2, 8) }`;
