@@ -5,18 +5,19 @@ const Timeline = require('./twitter/timeline');
 const Status = require('./twitter/status');
 const ntc = require('./vendor/ntc/ntc');
 
-const screenName = 'everycolorbot';
+const targetScreenName = 'everycolorbot';
+const botScreenName = 'colornamebot';
 let bearerToken;
 
 Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TWITTER_CONSUMER_API_SECRET).then(response => {
   bearerToken = response;
   return response;
 }).then(response => {
-  return Timeline.request(bearerToken, 'colornamebot', { count: 1 }).then(response => {
+  return Timeline.request(bearerToken, botScreenName, { count: 1 }).then(response => {
     return response[0]["in_reply_to_status_id"];
   })
 }).then(sinceId => {
-  return Timeline.request(bearerToken, screenName, { since_id: sinceId, count: 200 });
+  return Timeline.request(bearerToken, targetScreenName, { since_id: sinceId, count: 200 });
 }).then(tweets => {
   //Using a reverse loop here so our sinceId lines up for the *next* run.
   //
@@ -28,7 +29,7 @@ Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TWITTER_CO
     const text = tweet.text.split(' ')[0];
     const hex = `#${ text.split(" ")[0].slice(2, 8) }`;
     const colorName = ntc.name(hex)[1];
-    const status = `@${ screenName } ${ colorName }`;
+    const status = `@${ targetScreenName } ${ colorName }`;
 
     console.log(status);
 
