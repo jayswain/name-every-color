@@ -11,10 +11,12 @@ Twitter.Bearer.requestToken(process.env.TWITTER_CONSUMER_API_KEY, process.env.TW
   bearerToken = response;
   return response;
 }).then(response => {
+  //find the id of the last tweet our bot responded to
   return Twitter.Timeline.request(bearerToken, botScreenName, { count: 1 }).then(response => {
     return response[0]["in_reply_to_status_id"];
   })
 }).then(sinceId => {
+  //find the tweets of the target bot since we last responded
   return Twitter.Timeline.request(bearerToken, targetScreenName, { since_id: sinceId, count: 200 });
 }).then(tweets => {
   //Using a reverse loop here so our sinceId lines up for the *next* run.
