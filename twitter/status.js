@@ -1,8 +1,8 @@
 const request = require('request');
 
 class Status {
-  static update(consumerAPIKey, consumerAPISecret, clientAccessToken, clientAccessSecret, message, qsParams) {
-    return new Promise((resolve, reject) => {
+  static async update(consumerAPIKey, consumerAPISecret, clientAccessToken, clientAccessSecret, message, qsParams) {
+    const response = await new Promise((resolve, reject) => {
       request.post({
         url: `https://api.twitter.com/1.1/statuses/update.json`,
         oauth: {
@@ -20,6 +20,7 @@ class Status {
         resolve(parsed);
       });
     });
+    return response;
   };
 }
 

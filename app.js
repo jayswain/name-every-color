@@ -33,21 +33,18 @@ class App {
         const colorName = ntc.name(hex)[1];
         const status = `@${ TARGET_SCREEN_NAME } ${ colorName }`;
 
-        console.log(text);
+        Twitter.Status.update(
+          process.env.TWITTER_CONSUMER_API_KEY,
+          process.env.TWITTER_CONSUMER_API_SECRET,
+          process.env.TWITTER_ACCOUNT_ACCESS_TOKEN,
+          process.env.TWITTER_ACCOUNT_ACCESS_TOKEN_SECRET,
+          status,
+          {
+            in_reply_to_status_id: id
+          }
+        )
 
-        //console.log(status);
-        //Twitter.Status.update(
-          //process.env.TWITTER_CONSUMER_API_KEY,
-          //process.env.TWITTER_CONSUMER_API_SECRET,
-          //process.env.TWITTER_ACCOUNT_ACCESS_TOKEN,
-          //process.env.TWITTER_ACCOUNT_ACCESS_TOKEN_SECRET,
-          //status,
-          //{
-            //in_reply_to_status_id: id
-          //}
-        //).then(response => {
-          //process.stdout.write('.');
-        //});
+        process.stdout.write('.');
       }
     }).then(() => {
       process.stdout.write('\n' + 'Finished' + '\n');
