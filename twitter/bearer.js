@@ -23,7 +23,7 @@ class Bearer {
   };
 
   static encodeKeyAndSecret(consumerAPIKey, consumerAPISecret) {
-    return new Buffer(`${ consumerAPIKey }:${ consumerAPISecret }`).toString('base64');
+    return Buffer.from(`${ consumerAPIKey }:${ consumerAPISecret }`).toString('base64');
   }
 }
 
