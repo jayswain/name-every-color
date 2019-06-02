@@ -23,9 +23,7 @@ class App {
     }).then(tweets => {
       //Using a reverse loop here so our sinceId lines up for the *next* run.
       //
-      //since_id param *includes* that id as well, so lets skip that one.
-      //
-      for(let i = tweets.length - 1; i--;) {
+      for(let i = tweets.length; i--;) {
         const tweet = tweets[i];
         const id = tweet.id_str;
         const text = tweet.text.split(' ')[0];
